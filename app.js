@@ -25,7 +25,6 @@ var connector = new builder.ChatConnector({
     appPassword: 'cpTjMdQ9phYCiHbFOEVG5iN'
 });
 server.post('/', connector.listen());
-//builder.Prompts.text(session, "What is your name?");
 var bot = new builder.UniversalBot(connector);
 var recognizer = new apiairecognizer('50ab8ddd9a594abfbe4cfe1a951dee8d');
 bot.recognizer(recognizer);
@@ -48,31 +47,28 @@ intents.matches('Welcome-message', [
 //      }
 // ]);
 
-intents.matches('Add user', function()
-{
-    // function (session, args) {
-    //     var gr = new GlideRecord('dev43073', 'sys_user', 'admin', 'DEUCD78YCgkJ');
-    //     var firstname = builder.EntityRecognizer.findEntity(args.entities, 'firstname');
-    //     var lastname = builder.EntityRecognizer.findEntity(args.entities, 'lastname');
-    //     var title = builder.EntityRecognizer.findEntity(args.entities, 'title');
-    //     var emails = builder.EntityRecognizer.findEntity(args.entities, 'email');
-    //     var username = builder.EntityRecognizer.findEntity(args.entities, 'username');
-    //     var password = builder.EntityRecognizer.findEntity(args.entities, 'password');
-    //     var fulfillment = builder.EntityRecognizer.findEntity(args.entities, 'fulfillment');
-    //     var actionIncomplete = builder.EntityRecognizer.findEntity(args.entities, 'actionIncomplete');
+intents.matches('Add user', [
+    function (session, args) {
+        var gr = new GlideRecord('dev43073', 'sys_user', 'admin', 'DEUCD78YCgkJ');
+        var firstname = builder.EntityRecognizer.findEntity(args.entities, 'firstname');
+        var lastname = builder.EntityRecognizer.findEntity(args.entities, 'lastname');
+        var title = builder.EntityRecognizer.findEntity(args.entities, 'title');
+        var emails = builder.EntityRecognizer.findEntity(args.entities, 'email');
+        var username = builder.EntityRecognizer.findEntity(args.entities, 'username');
+        var password = builder.EntityRecognizer.findEntity(args.entities, 'password');
+        var fulfillment = builder.EntityRecognizer.findEntity(args.entities, 'fulfillment');
+        var actionIncomplete = builder.EntityRecognizer.findEntity(args.entities, 'actionIncomplete');
      
-    //   if (fulfillment) {
-    //      var speech = fulfillment.entity;        
-    //      //session.send(speech+JSON.stringify(args));
-    //  }
-    //     session.send(JSON.stringify(args));
+      if (fulfillment) {
+         var speech = fulfillment.entity;        
+         //session.send(speech+JSON.stringify(args));
+     }
+        session.send(JSON.stringify(args));
      
        
-    // }
-    //builder.Prompts.text(session, "What is your name?");
-}
-);
-builder.Prompts.text(session, "What is your name?");
+    }
+]);
+
 intents.onDefault(function (session) {
     session.send("Sorry...can you say that again?");
 });
