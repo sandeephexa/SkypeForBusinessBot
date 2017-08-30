@@ -25,6 +25,7 @@ var connector = new builder.ChatConnector({
     appPassword: 'cpTjMdQ9phYCiHbFOEVG5iN'
 });
 server.post('/', connector.listen());
+builder.Prompts.text(session, "What is your name?");
 var bot = new builder.UniversalBot(connector);
 var recognizer = new apiairecognizer('50ab8ddd9a594abfbe4cfe1a951dee8d');
 bot.recognizer(recognizer);
@@ -68,7 +69,7 @@ intents.matches('Add user', function()
      
        
     // }
-    builder.Prompts.text(session, "What is your name?");
+    //builder.Prompts.text(session, "What is your name?");
 }
 );
 
