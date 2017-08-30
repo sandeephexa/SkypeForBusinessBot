@@ -67,7 +67,7 @@ intents.matches('Add user',
      
        
     // }
-    bot.dialog('greetings', [
+    bot.dialog('Add user', [
     // Step 1
     function (session) {
         builder.Prompts.text(session, 'Hi! What is your name?');
@@ -76,9 +76,8 @@ intents.matches('Add user',
     function (session, results) {
         session.endDialog('Hello %s!', results.response);
     }
-
-    
-]));
+    ])
+);
 
 intents.onDefault(function (session) {
     session.send("Sorry...can you say that again?");
