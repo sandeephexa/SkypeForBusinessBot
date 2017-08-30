@@ -47,7 +47,7 @@ intents.matches('Welcome-message', [
 //      }
 // ]);
 
-intents.matches('Add user', 
+//intents.matches('Add user', 
     // function (session, args) {
     //     var gr = new GlideRecord('dev43073', 'sys_user', 'admin', 'DEUCD78YCgkJ');
     //     var firstname = builder.EntityRecognizer.findEntity(args.entities, 'firstname');
@@ -77,7 +77,7 @@ intents.matches('Add user',
         session.endDialog('Hello %s!', results.response);
     }
     ])
-);
+//);
 
 intents.onDefault(function (session) {
     session.send("Sorry...can you say that again?");
