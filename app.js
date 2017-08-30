@@ -21,18 +21,18 @@ server.listen(process.env.port || process.env.PORT || 3978, function () {
 });
 
 var connector = new builder.ChatConnector({
-    appId: 'd60f4a2a-5926-42c5-baa6-db7a8ddcd162',
-    appPassword: '2uiQBbbGGAhkxnGVJDBeb9X'
+    appId: 'd105ed4b-a5a0-4423-8fd4-61932d183b3f',
+    appPassword: 'cpTjMdQ9phYCiHbFOEVG5iN'
 });
 server.post('/', connector.listen());
 var bot = new builder.UniversalBot(connector);
-var recognizer = new apiairecognizer('854ef36ee9ff4389baf041d8f87e40e0');
+var recognizer = new apiairecognizer('50ab8ddd9a594abfbe4cfe1a951dee8d');
 bot.recognizer(recognizer);
 var intents = new builder.IntentDialog({ recognizers: [recognizer] });
 bot.dialog('/', intents);
-intents.matches('Default Welcome Intent', [
+intents.matches('Welcome-message', [
     function (session, args) {
-        session.send("Have a good day! How can I help you?");
+        session.send("How can I help you?");
     }
 ]);//Welcome Intent Fired
 // intents.matches('User registration',[
@@ -47,7 +47,7 @@ intents.matches('Default Welcome Intent', [
 //      }
 // ]);
 
-intents.matches('add_user', [
+intents.matches('Add user', [
     function (session, args) {
         var gr = new GlideRecord('dev43073', 'sys_user', 'admin', 'DEUCD78YCgkJ');
         var firstname = builder.EntityRecognizer.findEntity(args.entities, 'firstname');
