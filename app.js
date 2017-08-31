@@ -36,7 +36,7 @@ var bot = new builder.UniversalBot(connector, function (session) {
       request.on('response', function (response) {
           let result = response.result;
           //session.send(JSON.stringify(result));
-          if(result.metadata.intentName=="Default Welcome Intent")
+          if(result.metadata.intentName=="Welcome-message")
           {
           session.send("Hi Welcome!!! \n\nWhat would you like to do?");
           }
@@ -57,16 +57,17 @@ var bot = new builder.UniversalBot(connector, function (session) {
           session.send(result.fulfillment.speech);    
           }
           }
-          else if(result.metadata.intentName=="add_user")
+          else if(result.metadata.intentName=="Add user")
           {
            var email=result.parameters["email"];
-          var firstname=result.parameters["given-name"];
-          var lastname=result.parameters["last-name"];
+          var firstname=result.parameters["firstname"];
+          var lastname=result.parameters["lastname"];
           var idno=result.parameters["number"];
           var password=result.parameters["password"];
           var jobtitle=result.parameters["title"];
           var username=result.parameters["username"];
-          if(username!="" && email!=""  && firstname!=""   && lastname!=""  && idno!="" && password!="" && jobtitle!="")
+          //if(username!="" && email!=""  && firstname!=""   && lastname!=""  && idno!="" && password!="" && jobtitle!="")
+           if(email!=""  && firstname!=""   && lastname!=""  && password!="" && jobtitle!="")
           {
            
          var obj = {
@@ -74,8 +75,8 @@ var bot = new builder.UniversalBot(connector, function (session) {
     user_password:password,
     first_name:firstname,
     last_name:lastname,
-    employee_number:idno,
-    user_name:username,
+    //employee_number:idno,
+    //user_name:username,
     title:jobtitle
 };
 var gr = new GlideRecord('dev43073', 'sys_user', 'admin', 'BUCnMM5FWds8');              
