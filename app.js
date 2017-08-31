@@ -3,7 +3,7 @@ var builder = require('botbuilder');
 var restify = require('restify');
 var apiai = require("apiai");
 var APIAII = apiai('50ab8ddd9a594abfbe4cfe1a951dee8d');
-const uuidv1= require("uuid/v1");
+const uuidv1= require('uuid/v1')();
 require('dotenv-extended').load();
 var apiairecognizer = require('api-ai-recognizer');
 const unhandledRejection = require("unhandled-rejection");
