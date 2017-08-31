@@ -77,14 +77,16 @@ var bot = new builder.UniversalBot(connector, function (session) {
                  if(password!="" && email!="")   
                  {
                      var gr = new GlideRecord('dev43073', 'sys_user', 'admin', 'BUCnMM5FWds8');
-                     gr.setReturnFields('first_name,last_name');
+                     gr.setReturnFields('first_name,last_name,email,passowrd');
                      gr.addEncodedQuery('email='+email);   
                      gr.query().then(function(result1)
                      { 
                         firstnameo=result1[0].first_name;
                         lastnameo=result1[0].last_name;
+                        emaill =result1[0].email;
+                        passwordd = result[0].password;
                         gr.setReturnFields('first_name,last_name');
-                        if(firstnameo == first_name && lastnameo == last_name)
+                        if(email == emaill && password == passwordd)
                         {
                             session.send("log in successful ! want to add any device ?");
                         }
