@@ -84,7 +84,13 @@ var bot = new builder.UniversalBot(connector, function (session) {
                         firstnameo=result1[0].first_name;
                         lastnameo=result1[0].last_name;
                         gr.setReturnFields('first_name,last_name');
-                         session.send("log in successful ! want to add any device ?");
+                        if(firstnameo == first_name && lastnameo == last_name)
+                        {
+                            session.send("log in successful ! want to add any device ?");
+                        }
+                        else{
+                            session.send("you are not an autherised user");
+                        }
                      }) 
                 }
                 else
