@@ -38,7 +38,7 @@ var bot = new builder.UniversalBot(connector, function (session) {
           //session.send(JSON.stringify(result));
           if(result.metadata.intentName=="Welcome-message")
           {
-          session.send("Hi Welcome!!! \n\nWhat would you like to do?");
+          session.send("Hi \n How can i help you");
           }
           else if(result.metadata.intentName=="add_device")
           {
@@ -65,7 +65,7 @@ var bot = new builder.UniversalBot(connector, function (session) {
           var idno=result.parameters["number"];
           var password=result.parameters["password"];
           var jobtitle=result.parameters["title"];
-          var username=result.parameters["username"];
+          var username=firstname+"."+lastname;
           //if(username!="" && email!=""  && firstname!=""   && lastname!=""  && idno!="" && password!="" && jobtitle!="")
            if(email!=""  && firstname!=""   && lastname!=""  && password!="" && jobtitle!="")
           {
@@ -76,7 +76,7 @@ var bot = new builder.UniversalBot(connector, function (session) {
     first_name:firstname,
     last_name:lastname,
     //employee_number:idno,
-    //user_name:username,
+    user_name:username,
     title:jobtitle
 };
 var gr = new GlideRecord('dev43073', 'sys_user', 'admin', 'BUCnMM5FWds8');              
