@@ -4,6 +4,8 @@ var restify = require('restify');
 var apiai = require("apiai");
 var APIAII = apiai('50ab8ddd9a594abfbe4cfe1a951dee8d');
 const uuidv1= require('uuid/v1')();
+var firstnameo;
+var lastnameo;
 require('dotenv-extended').load();
 var apiairecognizer = require('api-ai-recognizer');
 const unhandledRejection = require("unhandled-rejection");
@@ -90,9 +92,29 @@ var gr = new GlideRecord('dev43073', 'sys_user', 'admin', 'BUCnMM5FWds8');
           }
         
           }
-          else if(result.metadata.intentName=="Default Fallback Intent")
+          else if(result.metadata.intentName=="add_device")
           {
-           session.send(result.fulfillment.speech);    
+
+//adding device login
+                 var password=result.parameters["password"];
+           var email=result.parameters["email"];
+          if(password!="" && email!="")   
+          {
+          var gr = new GlideRecord('dev43073', 'sys_user', 'admin', 'BUCnMM5FWds8');
+          gr.setReturnFields('first_name,last_name');
+          gr.addEncodedQuery('email='+email);   
+          gr.query().then(function(result1){ 
+          firstnameo=result1[0].first_name;
+          lastnameo=result1[0].last_name;
+          gr.setReturnFields('first_name,last_name');
+          session.send("You Successfully logged in. What you want me to do?");
+          }) 
+          }
+          else
+          {
+          session.send(result.fulfillment.speech);    
+          }
+               
           }
       });
       request.on('error', function (error) {
