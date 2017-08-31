@@ -31,91 +31,106 @@ var connector = new builder.ChatConnector({
 });
 server.post('/', connector.listen());
 var bot = new builder.UniversalBot(connector, function (session) {
-  if (session.message.text) {
+  if (session.message.text) 
+  {
         var request = APIAII.textRequest(session.message.text, {
             sessionId: uuidv1
         });
-      request.on('response', function (response) {
-          let result = response.result;
+        request.on('response', function (response)
+         {
+            let result = response.result;
           //session.send(JSON.stringify(result));
-          if(result.metadata.intentName=="Welcome-message")
-          {
-          session.send("Hi \n How can i help you");
-          }
-          else if(result.metadata.intentName=="add_device")
-          {
-           var password=result.parameters["password"];
-           var email=result.parameters["email"];
-          if(password!="" && email!="")   
-          {
-          var gr = new GlideRecord('dev43073', 'sys_user', 'admin', 'BUCnMM5FWds8');
-          gr.setReturnFields('first_name,last_name');
-          gr.query().then(function(result1){ //returns promise 
-          session.send(JSON.stringify(result1)); 
-          }) 
-          }
-          else
-          {
-          session.send(result.fulfillment.speech);    
-          }
-          }
-          else if(result.metadata.intentName=="Add user")
-          {
-           var email=result.parameters["email"];
-          var firstname=result.parameters["firstname"];
-          var lastname=result.parameters["lastname"];
-          var idno=result.parameters["number"];
-          var password=result.parameters["password"];
-          var jobtitle=result.parameters["title"];
-          var username=firstname+"."+lastname;
-          //if(username!="" && email!=""  && firstname!=""   && lastname!=""  && idno!="" && password!="" && jobtitle!="")
-           if(email!=""  && firstname!=""   && lastname!=""  && password!="" && jobtitle!="")
-          {
-           
-         var obj = {
-    email:email,
-    user_password:password,
-    first_name:firstname,
-    last_name:lastname,
-    //employee_number:idno,
-    user_name:username,
-    title:jobtitle
-};
-var gr = new GlideRecord('dev43073', 'sys_user', 'admin', 'BUCnMM5FWds8');              
-              gr.insert(obj).then(function(response){
- session.send("Thanks for your Details!\n\n Want anything more ?"); 
-})
-         }
-          else
-          {
-           session.send(result.fulfillment.speech);
-          }
-        
-          }
-          else if(result.metadata.intentName=="add_device")
-          {
-
-//adding device login
+             if(result.metadata.intentName=="Welcome-message")
+            {
+              session.send("Hi \n How can i help you");
+             }
+             
+             else if(result.metadata.intentName=="Device_allocation")
+             {
+                 var givenname=firstnameo+" "+lastnameo;
+                var deviceentity=result.parameters["device_entity"];
+               // var ipaddress=result.parameters["number"];
+                //var status_device=result.parameters["status_device"];
+          
+                if(password!="" && givenname!="" && deviceentity!="" )
+                {
+                         var obj = 
+                        {
+                            assigned_to:givenname,
+                            name:deviceentity,
+                        };
+                         var gr = new GlideRecord('dev43073', 'cmdb_ci_comm', 'admin', 'BUCnMM5FWds8');              
+                        gr.insert(obj).then(function(response)
+                        {
+                            session.send("Device updated successfully !!!"); 
+                        })            
+                }  
+                else
+                {
+                     session.send(result.fulfillment.speech);    
+                }
+            }
+            else if(result.metadata.intentName=="add_device_login")
+            {
                  var password=result.parameters["password"];
-           var email=result.parameters["email"];
-          if(password!="" && email!="")   
-          {
-          var gr = new GlideRecord('dev43073', 'sys_user', 'admin', 'BUCnMM5FWds8');
-          gr.setReturnFields('first_name,last_name');
-          gr.addEncodedQuery('email='+email);   
-          gr.query().then(function(result1){ 
-          firstnameo=result1[0].first_name;
-          lastnameo=result1[0].last_name;
-          gr.setReturnFields('first_name,last_name');
-          session.send("You Successfully logged in. What you want me to do?");
-          }) 
-          }
-          else
-          {
-          session.send(result.fulfillment.speech);    
-          }
-               
-          }
+                 var email=result.parameters["email"];
+                 if(password!="" && email!="")   
+                 {
+                     var gr = new GlideRecord('dev43073', 'sys_user', 'admin', 'BUCnMM5FWds8');
+                     gr.setReturnFields('first_name,last_name');
+                     gr.addEncodedQuery('email='+email);   
+                     gr.query().then(function(result1)
+                     { 
+                        firstnameo=result1[0].first_name;
+                        lastnameo=result1[0].last_name;
+                        gr.setReturnFields('first_name,last_name');
+                         session.send("You Successfully logged in. What you want me to do?");
+                     }) 
+                }
+                else
+                {
+                    session.send(result.fulfillment.speech);    
+                }
+             }
+                else if(result.metadata.intentName=="Add user")
+                {
+                    var email=result.parameters["email"];
+                    var firstname=result.parameters["firstname"];
+                    var lastname=result.parameters["lastname"];
+                    var idno=result.parameters["number"];
+                    var password=result.parameters["password"];
+                     var jobtitle=result.parameters["title"];
+                     var username=firstname+"."+lastname;
+                        //if(username!="" && email!=""  && firstname!=""   && lastname!=""  && idno!="" && password!="" && jobtitle!="")
+                    if(email!=""  && firstname!=""   && lastname!=""  && password!="" && jobtitle!="")
+                    {
+           
+                         var obj = {
+                          email:email,
+                         user_password:password,
+                        first_name:firstname,
+                         last_name:lastname,
+                         //employee_number:idno,
+                         user_name:username,
+                            title:jobtitle
+                        };
+                        var gr = new GlideRecord('dev43073', 'sys_user', 'admin', 'BUCnMM5FWds8');              
+                         gr.insert(obj).then(function(response)
+                         {
+                            session.send("Thanks for your Details!\n\n Want anything more ?"); 
+                        })
+                    }
+                    else
+                     {
+                            session.send(result.fulfillment.speech);
+                     }
+        
+                }
+                else if(result.metadata.intentName=="Default Fallback Intent")
+                {
+                    session.send(result.fulfillment.speech);    
+                }
+              
       });
       request.on('error', function (error) {
             //  console.log(error);
