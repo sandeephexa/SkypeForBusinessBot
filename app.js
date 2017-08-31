@@ -84,7 +84,7 @@ var bot = new builder.UniversalBot(connector, function (session) {
                         firstnameo=result1[0].first_name;
                         lastnameo=result1[0].last_name;
                         gr.setReturnFields('first_name,last_name');
-                         session.send("You Successfully logged in. What you want me to do?");
+                         session.send("log in successful ! want to add any device ?");
                      }) 
                 }
                 else
@@ -117,7 +117,7 @@ var bot = new builder.UniversalBot(connector, function (session) {
                         var gr = new GlideRecord('dev43073', 'sys_user', 'admin', 'BUCnMM5FWds8');              
                          gr.insert(obj).then(function(response)
                          {
-                            session.send("Thanks for your Details!\n\n Want anything more ?"); 
+                            session.send("User created ! Do you need anything else ?"); 
                         })
                     }
                     else
