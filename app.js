@@ -1,6 +1,9 @@
 var fs = require('fs');
 var builder = require('botbuilder');
 var restify = require('restify');
+var apiai = require("apiai");
+var APIAII = apiai('50ab8ddd9a594abfbe4cfe1a951dee8d');
+const uuidv1= require("uuid/v1");
 require('dotenv-extended').load();
 var apiairecognizer = require('api-ai-recognizer');
 const unhandledRejection = require("unhandled-rejection");
@@ -25,50 +28,83 @@ var connector = new builder.ChatConnector({
     appPassword: 'cpTjMdQ9phYCiHbFOEVG5iN'
 });
 server.post('/', connector.listen());
-var bot = new builder.UniversalBot(connector);
-var recognizer = new apiairecognizer('50ab8ddd9a594abfbe4cfe1a951dee8d');
-bot.recognizer(recognizer);
-var intents = new builder.IntentDialog({ recognizers: [recognizer] });
-bot.dialog('/', intents);
-intents.matches('Welcome-message', [
-    function (session, args) {
-        session.send("How can I help you?");
-    }
-]);//Welcome Intent Fired
-// intents.matches('User registration',[
-//      function (session, args) {
-//      session.send("sure, Can you please tell me your name ?");
-//      }
-// ]);
-// intents.matches('User registration - yes',[
-//      function (session, args) {
-//       var name = builder.EntityRecognizer.findEntity(args.entities, 'name');   
-//      session.send("Nice to meet you "+firstname+". Can I have your Employee ID number please.");
-//      }
-// ]);
+var bot = new builder.UniversalBot(connector, function (session) {
+  if (session.message.text) {
+        var request = APIAII.textRequest(session.message.text, {
+            sessionId: uuidv1
+        });
+      request.on('response', function (response) {
+          let result = response.result;
+          //session.send(JSON.stringify(result));
+          if(result.metadata.intentName=="Default Welcome Intent")
+          {
+          session.send("Hi Welcome!!! \n\nWhat would you like to do?");
+          }
+          else if(result.metadata.intentName=="add_device")
+          {
+           var password=result.parameters["password"];
+           var email=result.parameters["email"];
+          if(password!="" && email!="")   
+          {
+          var gr = new GlideRecord('dev43073', 'sys_user', 'admin', 'BUCnMM5FWds8');
+          gr.setReturnFields('first_name,last_name');
+          gr.query().then(function(result1){ //returns promise 
+          session.send(JSON.stringify(result1)); 
+          }) 
+          }
+          else
+          {
+          session.send(result.fulfillment.speech);    
+          }
+          }
+          else if(result.metadata.intentName=="add_user")
+          {
+           var email=result.parameters["email"];
+          var firstname=result.parameters["given-name"];
+          var lastname=result.parameters["last-name"];
+          var idno=result.parameters["number"];
+          var password=result.parameters["password"];
+          var jobtitle=result.parameters["title"];
+          var username=result.parameters["username"];
+          if(username!="" && email!=""  && firstname!=""   && lastname!=""  && idno!="" && password!="" && jobtitle!="")
+          {
+           
+         var obj = {
+    email:email,
+    user_password:password,
+    first_name:firstname,
+    last_name:lastname,
+    employee_number:idno,
+    user_name:username,
+    title:jobtitle
+};
+var gr = new GlideRecord('dev43073', 'sys_user', 'admin', 'BUCnMM5FWds8');              
+              gr.insert(obj).then(function(response){
+ session.send("Thanks for your Details!\n\n Want anything more ?"); 
+})
+         }
+          else
+          {
+           session.send(result.fulfillment.speech);
+          }
+        
+          }
+          else if(result.metadata.intentName=="Default Fallback Intent")
+          {
+           session.send(result.fulfillment.speech);    
+          }
+      });
+      request.on('error', function (error) {
+            //  console.log(error);
+        });
+     request.end();
+  }
 
-intents.matches('Add user', [
-    function (session, args) {
-        var gr = new GlideRecord('dev43073', 'sys_user', 'admin', 'DEUCD78YCgkJ');
-        var firstname = builder.EntityRecognizer.findEntity(args.entities, 'firstname');
-        var lastname = builder.EntityRecognizer.findEntity(args.entities, 'lastname');
-        var title = builder.EntityRecognizer.findEntity(args.entities, 'title');
-        var emails = builder.EntityRecognizer.findEntity(args.entities, 'email');
-        var username = builder.EntityRecognizer.findEntity(args.entities, 'username');
-        var password = builder.EntityRecognizer.findEntity(args.entities, 'password');
-        var fulfillment = builder.EntityRecognizer.findEntity(args.entities, 'fulfillment');
-        var actionIncomplete = builder.EntityRecognizer.findEntity(args.entities, 'actionIncomplete');
-     
-      if (fulfillment) {
-         var speech = fulfillment.entity;        
-         //session.send(speech+JSON.stringify(args));
-     }
-        session.send(JSON.stringify(args));
-     
-       
-    }
-]);
-
-intents.onDefault(function (session) {
-    session.send("Sorry...can you say that again?");
 });
+          
+
+
+//console.log("testing");
+// intents.onDefault(function (session) {
+//     session.send("Sorry...can you say that again?");
+// });
