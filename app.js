@@ -134,10 +134,16 @@ var bot = new builder.UniversalBot(connector, function (session) {
                      }
         
                 }
+                else if(result.metadata.intentName=="satisfaction intent")
+                {
+                    session.send("Thank you ! have a nice day");   
+                }
                 else if(result.metadata.intentName=="Default Fallback Intent")
                 {
                     session.send(result.fulfillment.speech);    
                 }
+               
+               
               
       });
       request.on('error', function (error) {
